@@ -36,10 +36,18 @@ function generateHiddenWord(hWord, sWord, char) { // "*a****", "maison", "i"
     return result
 }
 
-let secretWord = "maison"
-let hiddenWord = createHiddenWord(secretWord)
-let aInWord = checkIfInWord("z", secretWord)
+const hiddenWordHTML = document.querySelector("h4")
+const inputHTML = document.querySelector("input")
+const buttonHTML = document.querySelector("button")
+const wordListHTML = document.querySelector("ul")
 
+const words = ["maison", "chambre", "velo", "appartement"]
+
+let secretWord = words[Math.floor(Math.random() * words.length)]
+let hiddenWord = createHiddenWord(secretWord)
+hiddenWordHTML.innerText = "Mot caché : " + hiddenWord
+
+let aInWord = checkIfInWord("z", secretWord)
 hiddenWord = generateHiddenWord("*a****", secretWord, "i")
 
 console.log(hiddenWord)
