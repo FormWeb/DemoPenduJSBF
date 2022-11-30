@@ -36,19 +36,72 @@ function generateHiddenWord(hWord, sWord, char) { // "*a****", "maison", "i"
     return result
 }
 
+function resetGame() {
+    secretWord = words[Math.floor(Math.random() * words.length)]
+    hiddenWord = createHiddenWord(secretWord)
+    hiddenWordHTML.innerText = "Mot caché : " + hiddenWord
+    tries = 0
+    maxTries = 10
+}
+
+function displayWord() {
+    for (const word of words) {
+        const liHTML = document.createElement("li")
+        liHTML.innerText = word
+        wordListHTML.appendChild(liHTML)
+    }
+}
+
+function testChar() {
+    const char = inputHTML.value
+
+    if (checkIfInWord(char, secretWord)) {
+        hiddenWord = generateHiddenWord(hiddenWord, secretWord, char)
+        console.log(hiddenWord)
+        hiddenWordHTML.innerText = "Mot caché : " + hiddenWord
+
+        if (!hiddenWord.includes("*")) {
+            console.log("Gagné !")
+        }
+    }
+    else {
+        tries++
+        if (tries > maxTries) {
+            console.log("Perdu !")
+        }
+    }
+
+    inputHTML.value = ""
+    inputHTML.focus()
+}
+
 const hiddenWordHTML = document.querySelector("h4")
 const inputHTML = document.querySelector("input")
-const buttonHTML = document.querySelector("button")
+const buttonHTML = document.querySelector("#try")
 const wordListHTML = document.querySelector("ul")
+const buttonNewGameHTML = document.querySelector("#new-game")
 
 const words = ["maison", "chambre", "velo", "appartement"]
 
-let secretWord = words[Math.floor(Math.random() * words.length)]
-let hiddenWord = createHiddenWord(secretWord)
-hiddenWordHTML.innerText = "Mot caché : " + hiddenWord
+let secretWord
+let hiddenWord
+let tries
+let maxTries
 
-let aInWord = checkIfInWord("z", secretWord)
-hiddenWord = generateHiddenWord("*a****", secretWord, "i")
+resetGame()
+displayWord()
 
-console.log(hiddenWord)
-console.log(aInWord)
+buttonHTML.addEventListener("click", () => {
+    testChar()
+})
+
+inputHTML.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") {
+        testChar()
+    }
+})
+
+buttonNewGameHTML.addEventListener("click", () => {
+    resetGame()
+})
+
